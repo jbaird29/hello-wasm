@@ -1,0 +1,3 @@
+-   First experience playing around with WebAssembly
+-   Analyzed performance of Rust-compiled WASM vs. JS for iterating through n-sized 32-bit integer arrays
+-   Trial Results: jbaird29.github.io/hello-wasm/
