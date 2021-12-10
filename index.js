@@ -45,9 +45,10 @@ const appendResultsToTable = (sizes, wasmResults, jsResults) => {
 };
 
 wasm.default().then(() => {
-    const iterations = 10;
+    const iterations = 5;
     const sizes = [1_000, 10_000, 100_000, 1_000_000, 10_000_000, 100_000_000];
     const wasmResults = runTest(iterations, sizes, wasm.count);
     const jsResults = runTest(iterations, sizes, count);
     appendResultsToTable(sizes, wasmResults, jsResults);
+    document.getElementById("loading-msg").innerText = `Complete. Each trial ran for ${iterations} iterations.`;
 });
