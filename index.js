@@ -3,11 +3,13 @@ import * as wasm from "./pkg/hello_wasm.js";
 
 const sum = (arr) => arr.reduce((prev, curr) => prev + curr);
 
+const count = (arr) => arr.reduce((prev) => prev + 1, 0);
+
 const runTest = (iterations, sizes, func) => {
     const allResults = [];
     sizes.forEach((size) => {
         const trialResults = [];
-        const data = [...new Array(size).keys()];
+        const data = new Uint32Array([...new Array(size).keys()]);
         for (let i = 0; i < iterations; i++) {
             const start = performance.now();
             func(data);
@@ -38,14 +40,14 @@ const appendResultsToTable = (sizes, wasmResults, jsResults) => {
         size.innerText = sizes[i].toLocaleString("en-US");
         wasmResult.innerText = wasmResults[i].toFixed(2);
         jsResult.innerText = jsResults[i].toFixed(2);
-        difference.innerText = (wasmResults[i] - jsResults[i]).toFixed(2);
+        difference.innerText = (jsResults[i] / wasmResults[i]).toFixed(2);
     }
 };
 
 wasm.default().then(() => {
     const iterations = 10;
-    const sizes = [100, 1_000, 10_000, 100_000, 1_000_000, 10_000_000];
-    const wasmResults = runTest(iterations, sizes, wasm.sum);
-    const jsResults = runTest(iterations, sizes, sum);
+    const sizes = [1_000, 10_000, 100_000, 1_000_000, 10_000_000, 100_000_000];
+    const wasmResults = runTest(iterations, sizes, wasm.count);
+    const jsResults = runTest(iterations, sizes, count);
     appendResultsToTable(sizes, wasmResults, jsResults);
 });
